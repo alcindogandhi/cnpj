@@ -1,0 +1,9 @@
+#!/bin/sh
+
+SCRIPT=$(readlink -f "$0")
+DIR=.
+
+cd $DIR
+
+rm -fr target
+mvn clean package

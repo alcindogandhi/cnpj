@@ -1,0 +1,11 @@
+#!/bin/sh
+
+SCRIPT=$(readlink -f "$0")
+DIR=$(dirname "$SCRIPT")
+NAME=$(cat pom.xml | grep artifactId | head -1 | cut -d'>' -f2 | cut -d'<' -f1)
+VERSION=$(cat pom.xml | grep version | head -2 | tail -1 | cut -d'>' -f2 | cut -d'<' -f1)
+JAR=$(ls "$DIR"/target/$NAME-$VERSION.jar)
+
+cd $DIR
+
+java -jar $JAR -a
