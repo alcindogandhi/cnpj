@@ -1,5 +1,9 @@
 package br.com.cnpj.util;
 
+import java.text.ParseException;
+
+import javax.swing.text.MaskFormatter;
+
 public final class Cnpj {
     static final byte BASE = 36;
     static final byte N = 12;
@@ -15,8 +19,8 @@ public final class Cnpj {
         return (byte) (b < 10 ? b + '0' : b - 10 + 'A');
     }
 
-    private static short dotProduct(final byte[] peso, final byte[] v) {
-        short sum = 0;
+    private static int dotProduct(final byte[] peso, final byte[] v) {
+        int sum = 0;
         for (int i = 0; i < N; i++) {
             sum += peso[i] * (v[i] - '0');
         }
@@ -24,22 +28,21 @@ public final class Cnpj {
     }
 
     private static byte calcDv(final byte[] v) {
-        int d1 = dotProduct(PESO1, v) % BASE;
-        int d2 = dotProduct(PESO2, v) % BASE;
-        System.out.println("D1: " + d1 + ", D2: " + d2);
+        int d1 = dotProduct(PESO1, v) % 11;
+        int d2 = dotProduct(PESO2, v);
 
         d1 = (d1 > 1) ? 11 - d1 : 0;
 	    d2 += d1*PESO2[N];
 	    d2 %= 11;
 	    d2 = (d2 > 1) ? 11 - d2 : 0;
-
 	    return (byte)(10*d1 + d2);
     }
 
     public static long encode(final String in) {
+        final byte[] bytes = in.getBytes();
         long code = 0;
-        for (final byte b : in.getBytes()) {
-            code = BASE * code + encodeByte(b);
+        for (int i = 0; i < N; i++) {
+            code = BASE * code + encodeByte(bytes[i]);
         }
         return code;
     }
@@ -64,7 +67,16 @@ public final class Cnpj {
     }
 
     public static String addMask(final String cnpj) {
-        return cnpj.replaceAll("(\\d{2})(\\d{3})(\\d{3})(\\d{4})(\\d{2})", "$1.$2.$3/$4-$5");
+        if (cnpj.length() != N + 2) {
+            return null;
+        }
+        try {
+            MaskFormatter mf = new MaskFormatter("AA.AAA.AAA/AAAA-##");
+            mf.setValueContainsLiteralCharacters(false);
+            return mf.valueToString(cnpj);
+        } catch (ParseException e) {
+            return null;
+        }
     }
 
     public static boolean isValid(String cnpj) {
@@ -78,7 +90,6 @@ public final class Cnpj {
             return false;
         }
         byte dv = (byte)(10*(cnpj.charAt(N)-'0') + (cnpj.charAt(N+1)-'0'));
-        System.out.println("CNPJ: " + cnpj + ", DV: " + dv + ", DV Calculado: " + calcDv(cnpj.getBytes()));
         return dv == calcDv(cnpj.getBytes());
     }
 }
