@@ -12,7 +12,7 @@ static const byte PESO1[] = {5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2};
 static const byte PESO2[] = {6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2};
 
 extern inline byte encode(const byte c) {
-	return (c < 'A') ? (c - '0') : (c - 'A' + 10);
+	return (c < 'A') ? (c - '0') : (c < 'a') ? (c - 'A' + 10) : (c - 'a' + 10);
 }
 
 extern inline byte decode(const byte d) {
@@ -20,10 +20,11 @@ extern inline byte decode(const byte d) {
 }
 
 static int16_t dot_product(const byte *v1, const byte *v2) {
-	uint16_t sum = 0;
+	uint16_t sum = 0, c = 0;
 	const byte *end = v1 + N;
 	for (; v1 != end; ++v1, ++v2) {
-		sum += *v1 * (*v2 - '0');
+		c = (*v2 < 'a') ? *v2 : (*v2 - 'a' + 'A');
+		sum += *v1 * (c - '0');
 	}
 	return sum;
 }
