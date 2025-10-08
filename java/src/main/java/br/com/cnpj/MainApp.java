@@ -11,7 +11,7 @@ public class MainApp {
 			"01.234.567/ABCD-06",
 			"1234567ABCD06",
 			"AB.CD1.234/5678-80", 
-			"ZZ.ZZZ.ZZZ/ZZZZ-62", 
+			"zz.zzz.zzz/zzzz-62", 
 			"12.ABC.345/01DE-35" 
 		};
 		for (String cnpj : cnpjs) {

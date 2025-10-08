@@ -12,7 +12,7 @@ int main() {
 		"01.234.567/ABCD-06",
 		"1234567ABCD06",
 		"AB.CD1.234/5678-80", 
-		"ZZ.ZZZ.ZZZ/ZZZZ-62", 
+		"zz.zzz.zzz/zzzz-62", 
 		"12.ABC.345/01DE-35" 
 	};
 	const uint8_t N_CNPJ = sizeof(cnpjs)/sizeof(uint8_t*);

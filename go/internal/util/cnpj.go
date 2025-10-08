@@ -13,8 +13,10 @@ var weight2 = []byte{6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2}
 func encode(c byte) byte {
 	if c < 'A' {
 		return c - '0'
+	} else if c < 'a' {
+		return c - 'A' + 10
 	}
-	return c - 'A' + 10
+	return c - 'a' + 10
 }
 
 func decode(d byte) byte {
@@ -26,8 +28,14 @@ func decode(d byte) byte {
 
 func dotProduct(v1, v2 []byte) int16 {
 	var sum int16 = 0
-	for i := 0; i < _N; i++ {
-		sum += int16(v1[i]) * int16(v2[i]-'0')
+	var c int16 = 0
+	for i := range _N {
+		if v2[i] < 'a' {
+			c = int16(v2[i])
+		} else {
+			c = int16(v2[i] - 'a' + 'A')
+		}
+		sum += int16(v1[i]) * (c - '0')
 	}
 	return sum
 }
@@ -78,7 +86,7 @@ func Decode(code uint64) string {
 func RemoveMask(cnpj string) string {
 	out := make([]byte, 0, len(cnpj))
 	for i := 0; i < len(cnpj); i++ {
-		if (cnpj[i] >= '0' && cnpj[i] <= '9') || (cnpj[i] >= 'A' && cnpj[i] <= 'Z') {
+		if (cnpj[i] >= '0' && cnpj[i] <= '9') || (cnpj[i] >= 'A' && cnpj[i] <= 'Z') || (cnpj[i] >= 'a' && cnpj[i] <= 'z') {
 			out = append(out, cnpj[i])
 		}
 	}
@@ -104,7 +112,7 @@ func Validate(cnpj string) bool {
 	}
 
 	for _, c := range cnpj[:_N] {
-		if (c < '0' || c > '9') && (c < 'A' || c > 'Z') {
+		if (c < '0' || c > '9') && (c < 'A' || c > 'Z') && (c < 'a' || c > 'z') {
 			return false
 		}
 	}
