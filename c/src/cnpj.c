@@ -64,11 +64,25 @@ void decode_cnpj(uint64_t code, byte *out) {
 }
 
 void remove_mask(const byte *in, byte *out) {
+	const ubyte cnpj_len = N + 2;
+	const byte *begin = out;
+	ubyte diff, len = 0;
 	for (; *in; ++in) {
-		if (isalnum(*in))
+		if (isalnum(*in)) {
 			*(out++) = *in;
+			++len;
+		}
 	}
 	*out = 0;
+	diff = cnpj_len - len;
+	if (diff > 0) {
+		for (; out >= begin; --out) {
+			out[diff] = *out;
+		}
+		for (out = out+diff; out >= begin; --out) {
+			*out = '0';
+		}
+	}	
 }
 
 void add_mask(const byte *in, byte *out) {

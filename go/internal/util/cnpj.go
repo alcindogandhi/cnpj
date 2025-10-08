@@ -7,8 +7,8 @@ const (
 	_N    = 12
 )
 
-var peso1 = []byte{5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2}
-var peso2 = []byte{6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2}
+var weight1 = []byte{5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2}
+var weight2 = []byte{6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2}
 
 func encode(c byte) byte {
 	if c < 'A' {
@@ -33,15 +33,15 @@ func dotProduct(v1, v2 []byte) int16 {
 }
 
 func calcDv(v []byte) int16 {
-	d1 := dotProduct(peso1, v) % 11
-	d2 := dotProduct(peso2, v)
+	d1 := dotProduct(weight1, v) % 11
+	d2 := dotProduct(weight2, v)
 
 	if d1 > 1 {
 		d1 = 11 - d1
 	} else {
 		d1 = 0
 	}
-	d2 += d1 * int16(peso2[_N])
+	d2 += d1 * int16(weight2[_N])
 	d2 %= 11
 	if d2 > 1 {
 		d2 = 11 - d2
@@ -82,7 +82,12 @@ func RemoveMask(cnpj string) string {
 			out = append(out, cnpj[i])
 		}
 	}
-	return string(out)
+	unmaskedCnpj := string(out)
+	diff := _N + 2 - len(unmaskedCnpj)
+	if diff > 0 {
+		unmaskedCnpj = fmt.Sprintf("%014s", unmaskedCnpj)
+	}
+	return unmaskedCnpj
 }
 
 func AddMask(cnpj string) string {

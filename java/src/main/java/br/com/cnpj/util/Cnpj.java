@@ -59,11 +59,15 @@ public final class Cnpj {
         return new String(v);
     }
 
-    public static String removeMask(final String cnpj) {
+    public static String removeMask(String cnpj) {
         if (cnpj == null || cnpj.isEmpty()) {
             return "";
         }
-        return cnpj.replaceAll("[^0-9A-Za-z]", "").toUpperCase();        
+        cnpj = cnpj.replaceAll("[^0-9A-Za-z]", "").toUpperCase();
+        if (cnpj.length() < (N+2)) {
+            cnpj = String.format("%14s", cnpj).replace(' ', '0');
+        }
+        return cnpj;
     }
 
     public static String addMask(final String cnpj) {
