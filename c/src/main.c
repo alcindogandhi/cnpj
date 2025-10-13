@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdbool.h>
-
+#include <string.h>
 #include "cnpj.h"
 
 int main() {
@@ -13,24 +13,26 @@ int main() {
 		"1234567ABCD06",
 		"AB.CD1.234/5678-80", 
 		"zz.zzz.zzz/zzzz-62", 
-		"12.ABC.345/01DE-35" 
+		"12.ABC.345/01DE-35",
+		"193042000196",
+		"193039000172",
+		"1930390001729",
+		"83581000172"
 	};
 	const uint8_t N_CNPJ = sizeof(cnpjs)/sizeof(uint8_t*);
-	uint64_t num = 0;
-	uint8_t i;
-	bool is_valid = false;
 
-	for (i = 0; i < N_CNPJ; ++i) {
+	for (uint8_t i = 0; i < N_CNPJ; ++i) {
+		const size_t length = strlen(cnpjs[i]);
 		printf("CNPJ: %s\n", cnpjs[i]);
-		remove_mask(cnpjs[i], cnpj);
+		remove_mask(cnpjs[i], cnpj, length);
 		printf("CNPJ sem máscara: %s\n", cnpj);
-		is_valid = validate(cnpj);
+		const bool is_valid = validate(cnpj);
 		printf("Validate: %s\n", is_valid ? "true" : "false");
 		if (!is_valid) {
 			printf("\n");
 			continue;
 		}
-		num = encode_cnpj(cnpj);
+		const uint64_t num = encode_cnpj(cnpj);
 		printf("CNPJ num: %lu\n", num);		
 		decode_cnpj(num, cnpj);
 		printf("CNPJ decodificado: %s\n", cnpj);
