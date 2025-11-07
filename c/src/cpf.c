@@ -3,20 +3,19 @@
 #include <string.h>
 #include <ctype.h>
 
-#include "cnpj.h"
+#include "cpf.h"
 
-static const ubyte BASE = 36;
-static const ubyte N = 12;
+static const ubyte N = 9;
 
-static const byte PESO1[] = {5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2};
-static const byte PESO2[] = {6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2};
+static const byte PESO1[] = { 10, 9, 8, 7, 6, 5, 4, 3, 2 };
+static const byte PESO2[] = { 11, 10, 9, 8, 7, 6, 5, 4, 3, 2 };
 
 static inline byte encode(const byte c) {
-	return (c < 'A') ? (c - '0') : (c < 'a') ? (c - 'A' + 10) : (c - 'a' + 10);
+	return (c - '0');
 }
 
 static inline byte decode(const byte d) {
-	return (d < 10) ? (d + '0') : (d - 10 + 'A');
+	return (d + '0');
 }
 
 static int16_t dot_product(const byte *v1, const byte *v2) {
@@ -41,35 +40,12 @@ static int8_t calc_dv(const byte *v) {
 	return (int8_t)(10*d1 + d2);
 }
 
-uint64_t cnpj_encode(const byte *in) {
-	uint64_t code = 0;
-	const byte *end = in + N;
-	for (; in != end; ++in) {
-		code = BASE*code + encode(*in);
-	}
-	return code;
-}
-
-void cnpj_decode(uint64_t code, byte *out) {
-	byte *p = out + N - 1;
-	byte *end = out - 1;
-	byte dv = 0;
-	for (; p != end; --p) {
-		*p = decode(code % BASE);
-		code /= BASE;
-	}
-	dv = calc_dv(out);
-	out[N] = dv / 10 + '0';
-	out[N+1] = dv % 10 + '0';
-	out[N+2] = 0;
-}
-
-void cnpj_remove_mask(const byte * const in, byte * const out, const size_t length) {
-	const ubyte cnpj_len = N + 2;
+void cpf_remove_mask(const byte * const in, byte * const out, const size_t length) {
+	const ubyte cpf_len = N + 2;
 	const byte *p_in = in + length - 1;
-	byte *p_out = out + cnpj_len - 1;
+	byte *p_out = out + cpf_len - 1;
 
-	out[cnpj_len] = 0;
+	out[cpf_len] = 0;
 	for (; (p_in >= in) && (p_out >= out); --p_in) {
 		if (isalnum(*p_in)) {
 			*(p_out--) = *p_in;
@@ -80,32 +56,28 @@ void cnpj_remove_mask(const byte * const in, byte * const out, const size_t leng
 	}
 }
 
-void cnpj_add_mask(const byte *in, byte *out) {
+void cpf_add_mask(const byte *in, byte *out) {
 	byte i;
-	for (i = 0; i < 2; ++i) {
+	for (i = 0; i < 3; ++i) {
 		*(out++) = *(in++);
 	}
 	*(out++) = '.';
-	for (i = 2; i < 5; ++i) {
+	for (i = 3; i < 6; ++i) {
 		*(out++) = *(in++);
 	}
 	*(out++) = '.';
-	for (i = 5; i < 8; ++i) {
-		*(out++) = *(in++);
-	}
-	*(out++) = '/';
-	for (i = 8; i < 12; ++i) {
+	for (i = 6; i < 9; ++i) {
 		*(out++) = *(in++);
 	}
 	*(out++) = '-';
-	for (i = 12; i < 14; ++i) {
+	for (i = 9; i < 11; ++i) {
 		*(out++) = *(in++);
 	}
 	*out = 0;
 }
 
-bool cnpj_validate(const byte* cnpj) {
-	size_t len = strlen(cnpj);
+bool cpf_validate(const byte* cnpj) {
+	const size_t len = strlen(cnpj);
 	int8_t i, dv = 0;
 	
 	if (len != (size_t)N+2)

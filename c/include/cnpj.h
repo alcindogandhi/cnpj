@@ -6,10 +6,10 @@
 typedef char byte;
 typedef unsigned char ubyte;
 
-uint64_t encode_cnpj(const byte *in);
-void decode_cnpj(uint64_t code, byte *out);
-void remove_mask(const byte *in, byte *out, const size_t length);
-void add_mask(const byte *in, byte *out);
-bool validate(const byte* cnpj);
+uint64_t cnpj_encode(const byte *in);
+void cnpj_decode(uint64_t code, byte *out);
+void cnpj_remove_mask(const byte *in, byte *out, const size_t length);
+void cnpj_add_mask(const byte *in, byte *out);
+bool cnpj_validate(const byte* cnpj);
 
 #endif // _cnpj_h_

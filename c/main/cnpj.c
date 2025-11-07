@@ -24,19 +24,19 @@ int main() {
 	for (uint8_t i = 0; i < N_CNPJ; ++i) {
 		const size_t length = strlen(cnpjs[i]);
 		printf("CNPJ: %s\n", cnpjs[i]);
-		remove_mask(cnpjs[i], cnpj, length);
+		cnpj_remove_mask(cnpjs[i], cnpj, length);
 		printf("CNPJ sem máscara: %s\n", cnpj);
-		const bool is_valid = validate(cnpj);
+		const bool is_valid = cnpj_validate(cnpj);
 		printf("Validate: %s\n", is_valid ? "true" : "false");
 		if (!is_valid) {
 			printf("\n");
 			continue;
 		}
-		const uint64_t num = encode_cnpj(cnpj);
+		const uint64_t num = cnpj_encode(cnpj);
 		printf("CNPJ num: %lu\n", num);		
-		decode_cnpj(num, cnpj);
+		cnpj_decode(num, cnpj);
 		printf("CNPJ decodificado: %s\n", cnpj);
-		add_mask(cnpj, cnpj_mask);
+		cnpj_add_mask(cnpj, cnpj_mask);
 		printf("CNPJ com máscara: %s\n\n", cnpj_mask);
 	}
 
