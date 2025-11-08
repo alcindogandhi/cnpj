@@ -9,7 +9,8 @@ int main() {
 	const char *cpfs[] = { 
 		"000.000.000-00",
 		"00000000001",
-		"111.444.777-35"
+		"111.444.777-35",
+		"111.ABC.777-35"
 	};
 	const uint8_t N_CPFS = sizeof(cpfs)/sizeof(uint8_t*);
 

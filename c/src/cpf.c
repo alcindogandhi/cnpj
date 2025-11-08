@@ -47,7 +47,7 @@ void cpf_remove_mask(const byte * const in, byte * const out, const size_t lengt
 
 	out[cpf_len] = 0;
 	for (; (p_in >= in) && (p_out >= out); --p_in) {
-		if (isalnum(*p_in)) {
+		if (isdigit(*p_in)) {
 			*(p_out--) = *p_in;
 		}
 	}
@@ -76,21 +76,26 @@ void cpf_add_mask(const byte *in, byte *out) {
 	*out = 0;
 }
 
-bool cpf_validate(const byte* cnpj) {
-	const size_t len = strlen(cnpj);
-	int8_t i, dv = 0;
+bool cpf_validate(const byte* cpf) {
+	const size_t len = strlen(cpf);
+	int8_t i, dv = 0, diff = 0;
+	const byte first = cpf[0];
 	
 	if (len != (size_t)N+2)
 		return false;
 
-	if (!isdigit(cnpj[N]) || !isdigit(cnpj[N+1]))
+	if (!isdigit(cpf[N]) || !isdigit(cpf[N+1]))
 		return false;
 
 	for (i = 0; i < N; ++i) {
-		if (!isalnum(cnpj[i]))
+		if (!isdigit(cpf[i]))
 			return false;
+		if (cpf[i] != first)
+			++diff;
 	}
+	if (diff == 0)
+		return false;
 
-	dv = 10*(cnpj[N]-'0') + (cnpj[N+1]-'0');
-	return (calc_dv(cnpj) == dv);
+	dv = 10*(cpf[N]-'0') + (cpf[N+1]-'0');
+	return (calc_dv(cpf) == dv);
 }
