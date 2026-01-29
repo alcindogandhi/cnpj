@@ -16,6 +16,8 @@ public class MainApp {
 		};
 		for (String cnpj : cnpjs) {
 			System.out.println("CNPJ: " + cnpj);
+			final Long codeObj = Cnpj.tryEncode(cnpj);
+			System.out.println("CNPJ codificado (tryEncode): " + codeObj);
 			cnpj = Cnpj.removeMask(cnpj);
 			System.out.println("CNPJ sem máscara: " + cnpj);
 			boolean isValid = Cnpj.isValid(cnpj);
@@ -24,7 +26,7 @@ public class MainApp {
 				System.out.println("");
 				continue;
 			}
-			long code = Cnpj.encode(cnpj);
+			final long code = Cnpj.encode(cnpj);
 			System.out.println("CNPJ codificado: " + code);
 			cnpj = Cnpj.decode(code);
 			System.out.println("CNPJ decodificado: " + cnpj);

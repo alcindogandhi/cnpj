@@ -38,6 +38,14 @@ public final class Cnpj {
 	    return (byte)(10*d1 + d2);
     }
 
+    public static Long tryEncode(String cnpj) {
+        cnpj = Cnpj.removeMask(cnpj);
+        if (!Cnpj.isValid(cnpj)) {
+            return null;
+        }
+        return Cnpj.encode(cnpj);
+    }
+
     public static long encode(final String in) {
         final byte[] bytes = in.getBytes();
         long code = 0;
