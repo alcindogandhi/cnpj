@@ -21,7 +21,7 @@ Em alguns casos específicos, por problemas de modelagem de dados, utilizam-se e
 - 11: IE
 
 No caso do CPF, a função de hash usada é a mesma do CNPJ, sem desprezar o dígito verificador, somada com a máscara do CPF (0x8000000000000000). Com isso, ela já está adaptada para um possível CPF alfanumérico, desde que ele não altere a quantidade de dígitos. Já no caso da IE, o hash é calculado somando o número da IE com a máscara da IE (0xC000000000000000)
-O código fonte dessas funções está disponível em [cnpj.c](src/code.c) e um exemplo de utilização pode ser visto [aqui](main/code.c).
+O código fonte dessas funções está disponível em [code.c](src/code.c) e um exemplo de utilização pode ser visto [aqui](main/code.c).
 
 ---
 ### CPF
