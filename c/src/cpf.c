@@ -19,10 +19,10 @@ static inline byte decode(const byte d) {
 }
 
 static int16_t dot_product(const byte *v1, const byte *v2) {
-	uint16_t sum = 0, c = 0;
+	uint16_t sum = 0;
 	const byte *end = v1 + N;
 	for (; v1 != end; ++v1, ++v2) {
-		c = (*v2 < 'a') ? *v2 : (*v2 - 'a' + 'A');
+		const uint16_t c = (*v2 < 'a') ? *v2 : (*v2 - 'a' + 'A');
 		sum += *v1 * (c - '0');
 	}
 	return sum;

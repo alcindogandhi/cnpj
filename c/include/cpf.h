@@ -1,5 +1,5 @@
-#ifndef _cnpj_h_
-#define _cnpj_h_
+#ifndef _cpf_h_
+#define _cpf_h_
 
 #include <stdint.h>
 
@@ -8,6 +8,6 @@ typedef unsigned char ubyte;
 
 void cpf_remove_mask(const byte *in, byte *out, const size_t length);
 void cpf_add_mask(const byte *in, byte *out);
-bool cpf_validate(const byte* cnpj);
+bool cpf_validate(const byte* cpf);
 
-#endif // _cnpj_h_
+#endif // _cpf_h_

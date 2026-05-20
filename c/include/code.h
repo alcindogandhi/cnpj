@@ -21,7 +21,7 @@ typedef unsigned char ubyte;
 
 void cnpj_add_mask(const byte *in, byte *out);
 size_t code_remove_mask(const byte * const in, byte * const out, const size_t in_len);
-uint64_t code_to_hash(const byte * const in, const size_t length);
+uint64_t code_to_hash(const byte * const in, const size_t len);
 size_t hash_to_code(uint64_t hash, byte *out);
 
 #endif // _code_h_
